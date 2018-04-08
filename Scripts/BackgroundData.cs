@@ -1,126 +1,163 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-    public class BackgroundData
+public class BackgroundData
+{
+    // Scaling Constants
+    double TaxRevenueScaling, WaterConsumptionRatePopScaling, WaterConsumptionRateTempScaling,
+        WaterTowerScaling, DroughtEventScaling = 1, MigrationEventScaling = 1
+        ;
+
+    // Gameplay Variables
+    public int TaxRevenue, Population, Temperature, Fund,
+        WaterConsumptionRate, WaterDistributionRate;
+
+    // private variables use for calculation
+    private int[] AmmountPulledFromSources;
+    private int NumberofSources;
+
+    // Upgradables and Event
+    public WaterSource[] WaterSources;
+    public int WaterTowers;
+    string CurrentEvent;
+
+    // constructor
+    public BackgroundData(int population, int temperature, int fund, double taxrevenuescale, double WCRPopScale, double WCRTempScale, double WTScale, int NumberofWaterSources)
     {
-        // Scaling Constants
-        double TaxRevenueScaling, WaterConsumptionRatePopScaling, WaterConsumptionRateTempScaling,
-            WaterTowerScaling, DroughtEventScaling = 1, FiltrationEventScaling = 1
-            ;
+        WaterSources = new WaterSource[NumberofWaterSources];
+        AmmountPulledFromSources = new int[NumberofWaterSources];
 
-        // Gameplay Variables
-        public int TaxRevenue, Population, Temperature, Fund,
-            WaterConsumptionRate, WaterDistributionRate;
+        Temperature = temperature;
+        Fund = fund;
+        TaxRevenueScaling = taxrevenuescale;
+        WaterConsumptionRatePopScaling = WCRPopScale;
+        WaterConsumptionRateTempScaling = WCRTempScale;
+        WaterTowerScaling = WTScale;
+        SetPopulation(population);
+        NumberofSources = NumberofWaterSources;
 
-        // private variables use for calculation
-        private int[] AmmountPulledFromSources;
+    }
 
-        // Upgradables and Event
-        public WaterSource[] WaterSources;
-        public int WaterTowers;
-        string CurrentEvent;
+    // increment population also increment TaxRevenue
+    public void IncrementPopulation(int a)
+    {
+        Population += a;
+        TaxRevenue = (int)(Population * a * TaxRevenueScaling);
+        WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling + Temperature * WaterConsumptionRateTempScaling);
 
-        // constructor
-        public BackgroundData(int population, int temperature, int fund, double taxrevenuescale, double WCRPopScale, double WCRTempScale, double WTScale, int NumberofWaterSources)
-        {
-            WaterSources = new WaterSource[NumberofWaterSources];
-            AmmountPulledFromSources = new int[NumberofWaterSources];
+    }
 
-            Temperature = temperature;
-            Fund = fund;
-            TaxRevenueScaling = taxrevenuescale;
-            WaterConsumptionRatePopScaling = WCRPopScale;
-            WaterConsumptionRateTempScaling = WCRTempScale;
-            WaterTowerScaling = WTScale;
-            SetPopulation(population);
-
-        }
-
-        // increment population also increment TaxRevenue
-        public void IncrementPopulation(int a)
-        {
-            Population += a;
-            TaxRevenue = (int)(Population * a * TaxRevenueScaling);
-            WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling + Temperature * WaterConsumptionRateTempScaling);
-
-        }
-
-        public void SetPopulation(int newpop)
+    public void SetPopulation(int newpop)
     {
         Population = newpop;
         TaxRevenue = (int)(Population * TaxRevenueScaling);
         WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling + Temperature * WaterConsumptionRateTempScaling);
     }
 
-        // Upgrading water tower, also changes WaterDistributionRate, and set AmmountPulled
-        public void UpgradeWaterTowers(int spent)
+    // Upgrading water tower, also changes WaterDistributionRate, and set AmmountPulled
+    public void UpgradeWaterTowers(int spent)
+    {
+
+        WaterTowers += (int)(spent * WaterTowerScaling);
+        int i = 0, sum = 0, ammountpulledfromeach;
+        while (i < NumberofSources)
         {
-            WaterTowers += (int)(spent * WaterTowerScaling);
-            int i = 0, sum = 0, ammountpulledfromeach;
-            while (WaterSources[i] != null)
-            {
-                ammountpulledfromeach = AsymptoticByY_Helper(WaterTowers, (WaterSources[i]).GetAvailability());
-                AmmountPulledFromSources[i] = ammountpulledfromeach;
-                i++;
-                sum += ammountpulledfromeach;
-            }
+
+            ammountpulledfromeach = AsymptoticByY_Helper(WaterTowers, ((WaterSources[i]).GetAvailability()));
+            AmmountPulledFromSources[i] = ammountpulledfromeach;
+            i++;
+            sum = sum + ammountpulledfromeach;
+        }
+        if (sum <= WaterConsumptionRate)
             WaterDistributionRate = sum;
-
+        else
+        {
+            i = 0;
+            double j = (double)WaterConsumptionRate / (double)sum;
+            while (i < NumberofSources)
+            {
+                AmmountPulledFromSources[i] = (int)(AmmountPulledFromSources[i] * j);
+                i++;
+            }
+            WaterDistributionRate = WaterConsumptionRate;
         }
 
-        // set water tower to fix ammount
-        public void SetWaterTowers(int fix)
+    }
+
+    // set water tower to fix ammount
+    public void SetWaterTowers(int fix)
+    {
+        WaterTowers = fix;
+        int i = 0, sum = 0, ammountpulledfromeach;
+        while (i < NumberofSources)
         {
-            WaterTowers += fix;
-            int i = 0, sum = 0, ammountpulledfromeach;
-            while (WaterSources[i] != null)
-            {
-                ammountpulledfromeach = AsymptoticByY_Helper(WaterTowers, (WaterSources[i]).GetAvailability());
-                AmmountPulledFromSources[i] = ammountpulledfromeach;
-                i++;
-                sum += ammountpulledfromeach;
-            }
+            ammountpulledfromeach = AsymptoticByY_Helper(WaterTowers, (WaterSources[i]).GetAvailability());
+
+            AmmountPulledFromSources[i] = ammountpulledfromeach;
+            i++;
+            sum += ammountpulledfromeach;
+        }
+
+        if (sum <= WaterConsumptionRate)
             WaterDistributionRate = sum;
-        }
-
-        //Extracting from sources
-        public int ExtractWaterSources()
+        else
         {
-            int i = 0, sum = 0;
-            while (WaterSources[i] != null)
+            i = 0;
+            double j = (double)WaterConsumptionRate / (double)sum;
+            while (i < NumberofSources)
             {
-                sum +=WaterSources[i].DepleteReserve(AmmountPulledFromSources[i]);
+                AmmountPulledFromSources[i] = (int)(AmmountPulledFromSources[i] * j);
+                //Debug.Log(AmmountPulledFromSources[i]);
                 i++;
-        }
-            return sum;
-        }
 
-        private int AsymptoticByY_Helper(int x, int c)
-        {
-            return ((x - 1) / (x + 1) + 1) * c / 2;
-        }
-
-        // fund automatically change base on TaxRevenue
-        public void SetFund()
-        {
-            Fund += TaxRevenue;
-        }
-
-        public bool DepleteFund(int spent)
-        {
-            int holder = Fund - spent;
-            if (holder >= 0) {
-                Fund = holder;
-                return true;
             }
-            return false;
-        }
+            //Debug.Log(j);
 
-        //Event setter
-        public void SetEvent(int type, int intensity)
+            WaterDistributionRate = WaterConsumptionRate;
+        }
+    }
+
+    //Extracting from sources
+    public int ExtractWaterSources()
+    {
+        int i = 0, sum = 0;
+        while (i < NumberofSources)
         {
+            sum += WaterSources[i].DepleteReserve(AmmountPulledFromSources[i]);
+            i++;
+        }
+        return sum;
+    }
+
+    private int AsymptoticByY_Helper(double x, double c)
+    {
+        double a = ((x - 1) / (x + 1) + 1);
+        double b = c / 2;
+        double d = a * b;
+        return (int)d;
+    }
+
+    // fund automatically change base on TaxRevenue
+    public void SetFund()
+    {
+        Fund += TaxRevenue;
+    }
+
+    public bool DepleteFund(int spent)
+    {
+        int holder = Fund - spent;
+        if (holder >= 0) {
+            Fund = holder;
+            return true;
+        }
+        return false;
+    }
+
+    //Event setter
+    public void SetEvent(int type, int intensity)
+    {
             //rain
-            if (type == 0)
+            /*if (type == 0)
             {
                 int i = 0;
                 CurrentEvent = "Rain";
@@ -128,18 +165,35 @@ using UnityEngine;
                 {
                     WaterSources[i].RefillReserve(intensity);
                 }
-            }
+            }*/
             //drought
-            else if (type == 1)
+            if (type == 1)
             {
-                CurrentEvent = "Drought";
+                //CurrentEvent = "Drought";
                 Temperature += (int)(intensity * DroughtEventScaling);
             }
-            //Filtration breakdown
-            /* else if(type == 2)
-             {
-                 WaterDistributionRate -= 
-             }*/
-        }
-
+            //Cold Front
+            else if (type == 2)
+            {
+                //CurrentEvent = "Cold Front";
+                Temperature -= (int)(intensity * DroughtEventScaling);
+            }
+            //Migration in
+            else if (type == 3)
+            {
+                IncrementPopulation((int)(intensity * MigrationEventScaling));
+            }
+            //Migration out
+            else if (type == 3)
+            {
+                IncrementPopulation((int)(intensity * MigrationEventScaling));
+            }
+        //Filtration breakdown
+        /* else if(type == 2)
+         {
+             WaterDistributionRate -= 
+         }*/
+    } 
     }
+
+    

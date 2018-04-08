@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour {
 
     //texts
     public Text Population, WaterConsumptionRate, WaterDistributionRate, Temperature, 
-        Turn, Fund, TaxRevenue, WinText, WTLevel, LR, LK, AR, AQ;
+        Turn, Fund, TaxRevenue, WinText, WTLevel, LR, LK, AR, AQ, SP,
+        Drought, WarmFront, ColdFront, MigrationIn, MigrationOut, Rain;
 
     //model objects
 
@@ -26,16 +27,16 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         gamelength = 20;
         turn = 0;
-        data = new BackgroundData(1000, 80, 100000, 1, 1, 1, 1, 3);
+        data = new BackgroundData(1000, 80, 100000, 1, 1, 1, .001, 3);
         //lake
         data.WaterSources[0]= new WaterSource(100000, 100, .5, .5);
         //aquifer
         data.WaterSources[1] = new WaterSource(100000, 100, .5, .5);
         //shipments
-        //data.WaterSources[2] = new WaterSource(200, 200, 1, 0);
+        data.WaterSources[2] = new WaterSource(0, 0, 1, 1);
 
         //set initial water towers
-        data.SetWaterTowers(10);
+        data.SetWaterTowers(1);
 
         //Reset Win Event
         WinText.text = "";
@@ -45,7 +46,7 @@ public class GameManager : MonoBehaviour {
         WTInvestment.onClick.AddListener(delegate { WTInvestmentListener(1000); });
         LKInvestment.onClick.AddListener(delegate { ResourceInvestmentListener(data.WaterSources[0],1000); });
         AQInvestment.onClick.AddListener(delegate { ResourceInvestmentListener(data.WaterSources[1],1000); });
-        //WaterShipment.onClick.AddListener(delegate { ResourceInvestmentListener(data.WaterSources[2]); });
+        WaterShipment.onClick.AddListener(delegate { WaterShipmentListener(data.WaterSources[2],1000); });
     }
 
 
@@ -66,12 +67,21 @@ public class GameManager : MonoBehaviour {
 
     }
 
+
+
     private void WTInvestmentListener(int spent)
     {
         if (data.DepleteFund(spent) == true)
         {
             data.DepleteFund(spent);
             data.UpgradeWaterTowers(spent);
+            /*int i= 0;
+            while (data.AmmountPulledFromSources[i] != 0)
+            {
+                print(data.AmmountPulledFromSources[i]);
+                i++;
+            }*/
+
         }
     }
 
@@ -80,6 +90,16 @@ public class GameManager : MonoBehaviour {
         if (data.DepleteFund(spent) == true)
         {
             w.Investment(spent);
+            data.SetWaterTowers(data.WaterTowers);
+        }
+    }
+
+    private void WaterShipmentListener(WaterSource w, int spent)
+    {
+        if (data.DepleteFund(spent) == true)
+        {
+            w.IncSource(spent);
+            data.SetWaterTowers(data.WaterTowers);
         }
     }
 
@@ -97,6 +117,7 @@ public class GameManager : MonoBehaviour {
         LK.text = "Lake Availability: " + data.WaterSources[0].GetAvailability().ToString();
         AR.text = "Aquifer Reserve: " + data.WaterSources[1].GetReserve().ToString();
         AQ.text = "Aquifer Availability: " + data.WaterSources[1].GetAvailability().ToString();
+        SP.text = "Storage Availability: " + data.WaterSources[2].GetReserve().ToString();
 
 
     }
