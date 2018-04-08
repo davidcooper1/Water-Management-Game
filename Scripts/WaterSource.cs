@@ -6,7 +6,7 @@ public class WaterSource{
     double AvailabilityScale, RefillScale;
     int Reserve, Availability;
 
-    //getter for availability
+    //getter and setter for availability
     public int GetAvailability()
     {
         return Availability;
@@ -28,6 +28,14 @@ public class WaterSource{
     public int GetReserve()
     {
         return Reserve;
+    }
+
+    //incrementing reserve and availability, use for water shipments
+    public void IncSource(int a)
+    {
+        Reserve += (int) (a*RefillScale);
+        Availability += (int)(a * RefillScale);
+        RefillScale = RefillScale * .8;
     }
 
     //refilling reserve, base on rain
