@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour {
 
     //texts
     public Text Population, WaterConsumptionRate, WaterDistributionRate, Temperature, 
-        Turn, Fund, TaxRevenue, WinText, WTLevel, LR, LK, AR, AQ, SP,
-        Drought, Monsoon, WarmFront, ColdFront, MigrationIn, MigrationOut, Rain;
+        Turn, Fund, TaxRevenue, WinText, LoseText, WTLevel, LR, LK, AR, AQ, SP,
+        Drought, Monsoon, WarmFront, ColdFront, MigrationIn, MigrationOut, Rain, LoseCounterText;
 
     //model objects
 
@@ -26,24 +26,25 @@ public class GameManager : MonoBehaviour {
     private int RainInterval;
     private int AverageRainInterval;
     private int CurrentTempEvent = 2, CurrentTempEventTurnCount, CurrentRainEvent = 2, CurrentRainEventTurnCount, CurrentPopEvent = 2, CurrentPopEventTurnCount;
+    private int LoseCounter=10;
+
+    //backup data for undo
 
     // Use this for initialization
     void Start () {
         gamelength = 50;
         turn = 0;
-        data = new BackgroundData(10000, 80, 100000, 3);
+        data = new BackgroundData(10000, 80, 10000, 3);
         //lake
-        data.WaterSources[0]= new WaterSource("Lake",100000, 20000, .5, .5);
+        data.WaterSources[0]= new WaterSource("Lake",100000, 7000, .5, .5);
         //aquifer
-        data.WaterSources[1] = new WaterSource("Aquifer",100000, 20000, .5, .5);
+        data.WaterSources[1] = new WaterSource("Aquifer",100000, 7000, .5, .5);
         //shipments
-        data.WaterSources[2] = new WaterSource("Shipment",0, 0, 1, 1);
+        data.WaterSources[2] = new WaterSource("Shipment",0, 0, 1, 10);
 
         //set initial water towers
         data.CalculateWaterDistributionRate();
 
-        //Reset Win Event
-        WinText.text = "";
 
         //Set Initial Rain Interval and TurnCount
         RainTurnCount = Random.Range(2, 4);
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour {
         AverageRainInterval = RainInterval;
 
         //reseting event icons/text
+        WinText.enabled = false;
         Rain.enabled = false;
         Drought.enabled = false;
         Monsoon.enabled = false;
@@ -58,6 +60,8 @@ public class GameManager : MonoBehaviour {
         MigrationOut.enabled = false;
         WarmFront.enabled = false;
         ColdFront.enabled = false;
+        LoseText.enabled = false;
+        LoseCounterText.text = "Lose Counter: 10";
         //buttons
         Endturn.onClick.AddListener(EndturnListener);
         WTInvestment.onClick.AddListener(delegate { WTInvestmentListener(1000); });
@@ -72,6 +76,18 @@ public class GameManager : MonoBehaviour {
     {
         if (turn < gamelength)
         {
+            if(LoseCounter == 0)
+            {
+                LoseText.enabled = true;
+                turn = 50;
+            }
+            else if (data.WaterDistributionRate < data.WaterConsumptionRate)
+            {
+                LoseCounter--;
+                LoseCounterText.text = "Lose Counter: " + LoseCounter.ToString();
+            }
+            data.ExtractWaterSources();
+
             if (RainTurnCount == 0)
             {
 
@@ -141,9 +157,8 @@ public class GameManager : MonoBehaviour {
                 Drought.enabled = false;
                 Monsoon.enabled = false;
             }
-
+            
             data.IncrementPopulation(10);
-            data.ExtractWaterSources();
             data.CalculateWaterDistributionRate();
             data.IncrementFund();
             turn++;

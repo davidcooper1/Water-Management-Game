@@ -4,8 +4,8 @@ using UnityEngine;
 public class BackgroundData
 {
     // Scaling Constants
-    double TaxRevenueScaling = 1, WaterConsumptionRatePopScaling = 1, WaterConsumptionRateTempScaling = 1,
-        WaterTowerScaling = 750, TempEventScaling = 1, MigrationEventScaling = 1
+    double TaxRevenueScaling = .1, WaterConsumptionRatePopScaling = 1, WaterConsumptionRateTempScaling = 1,
+        WaterTowerScaling = 2000, TempEventScaling = 1, MigrationEventScaling = 1
         ;
 
     // Gameplay Variables
@@ -21,6 +21,7 @@ public class BackgroundData
     public WaterSource[] WaterSources;
     public int WaterTowers = 1;
     string CurrentEvent;
+
 
     // constructor
     public BackgroundData(int population, int temperature, int fund, int NumberofWaterSources)
