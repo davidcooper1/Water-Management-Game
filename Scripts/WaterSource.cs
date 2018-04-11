@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WaterSource{
     double AvailabilityScale, RefillScale;
-    int Reserve, Availability;
+    int Reserve, Availability, MaxAvailability;
+    public string type;
 
     //getter and setter for availability
     public int GetAvailability()
@@ -16,8 +17,10 @@ public class WaterSource{
     public bool Investment(int i)
     {
         int holder =(int)(Availability+ AvailabilityScale * i);
+        MaxAvailability = holder;
         if (holder >=Reserve)
         {
+            Availability = Reserve;
             return false;
         }
         Availability = holder;
@@ -42,6 +45,10 @@ public class WaterSource{
     public void RefillReserve(int rainstrength)
     {
         Reserve += (int)(rainstrength * RefillScale);
+        if (Reserve > MaxAvailability)
+            Availability = MaxAvailability;
+        else
+            Availability = Reserve;
     }
 
     //pulling from reserve
@@ -51,18 +58,23 @@ public class WaterSource{
         if (holder >= 0)
         {
             Reserve = holder;
+            if (Availability > Reserve)
+                Availability = Reserve;
             return i;
         }
         holder = Reserve;
         Reserve = 0;
+        Availability = 0;
         return holder;
     }
 
     //constructor(reserve, availability, investmentscale, refillingscale)
-    public WaterSource(int reserve, int availability, double investscale, double refillingscale)
+    public WaterSource(string name, int reserve, int availability, double investscale, double refillingscale)
     {
+        type = name;
         Reserve = reserve;
         Availability = availability;
+        MaxAvailability = availability;
         AvailabilityScale = investscale;
         RefillScale = refillingscale;
     }
