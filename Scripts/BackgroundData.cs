@@ -4,45 +4,46 @@ using UnityEngine;
 public class BackgroundData
 {
     // Scaling Constants
-    double TaxRevenueScaling, WaterConsumptionRatePopScaling, WaterConsumptionRateTempScaling,
-        WaterTowerScaling, DroughtEventScaling = 1, MigrationEventScaling = 1
+    double TaxRevenueScaling = 1, WaterConsumptionRatePopScaling = 1, WaterConsumptionRateTempScaling = 1,
+        WaterTowerScaling = 750, TempEventScaling = 1, MigrationEventScaling = 1
         ;
 
     // Gameplay Variables
-    public int TaxRevenue, Population, Temperature, Fund,
+    public int TaxRevenue, Population, Temperature = 70, Fund,
         WaterConsumptionRate, WaterDistributionRate;
 
     // private variables use for calculation
     private int[] AmmountPulledFromSources;
     private int NumberofSources;
+    private int MaxTemp=120, MinTemp=20, MaxPop = 20000, MinPop = 5000;
 
     // Upgradables and Event
     public WaterSource[] WaterSources;
-    public int WaterTowers;
+    public int WaterTowers = 1;
     string CurrentEvent;
 
     // constructor
-    public BackgroundData(int population, int temperature, int fund, double taxrevenuescale, double WCRPopScale, double WCRTempScale, double WTScale, int NumberofWaterSources)
+    public BackgroundData(int population, int temperature, int fund, int NumberofWaterSources)
     {
         WaterSources = new WaterSource[NumberofWaterSources];
         AmmountPulledFromSources = new int[NumberofWaterSources];
 
         Temperature = temperature;
         Fund = fund;
-        TaxRevenueScaling = taxrevenuescale;
-        WaterConsumptionRatePopScaling = WCRPopScale;
-        WaterConsumptionRateTempScaling = WCRTempScale;
-        WaterTowerScaling = WTScale;
         SetPopulation(population);
         NumberofSources = NumberofWaterSources;
-
     }
 
+    // Increment Fund
+    public void IncrementFund()
+    {
+        Fund += TaxRevenue;
+    }
     // increment population also increment TaxRevenue
     public void IncrementPopulation(int a)
     {
         Population += a;
-        TaxRevenue = (int)(Population * a * TaxRevenueScaling);
+        TaxRevenue = (int)(Population * TaxRevenueScaling);
         WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling + Temperature * WaterConsumptionRateTempScaling);
 
     }
@@ -55,65 +56,52 @@ public class BackgroundData
     }
 
     // Upgrading water tower, also changes WaterDistributionRate, and set AmmountPulled
-    public void UpgradeWaterTowers(int spent)
+    public void UpgradeWaterTowers()
     {
 
-        WaterTowers += (int)(spent * WaterTowerScaling);
-        int i = 0, sum = 0, ammountpulledfromeach;
-        while (i < NumberofSources)
-        {
-
-            ammountpulledfromeach = AsymptoticByY_Helper(WaterTowers, ((WaterSources[i]).GetAvailability()));
-            AmmountPulledFromSources[i] = ammountpulledfromeach;
-            i++;
-            sum = sum + ammountpulledfromeach;
-        }
-        if (sum <= WaterConsumptionRate)
-            WaterDistributionRate = sum;
-        else
-        {
-            i = 0;
-            double j = (double)WaterConsumptionRate / (double)sum;
-            while (i < NumberofSources)
-            {
-                AmmountPulledFromSources[i] = (int)(AmmountPulledFromSources[i] * j);
-                i++;
-            }
-            WaterDistributionRate = WaterConsumptionRate;
-        }
+        WaterTowers++;
+        CalculateWaterDistributionRate();
 
     }
 
-    // set water tower to fix ammount
-    public void SetWaterTowers(int fix)
+    // Calculate WaterDistributionRate
+    public void CalculateWaterDistributionRate()
     {
-        WaterTowers = fix;
-        int i = 0, sum = 0, ammountpulledfromeach;
+        int i = 0, dis = 0, sum = 0;
         while (i < NumberofSources)
         {
-            ammountpulledfromeach = AsymptoticByY_Helper(WaterTowers, (WaterSources[i]).GetAvailability());
-
-            AmmountPulledFromSources[i] = ammountpulledfromeach;
+            sum = sum + WaterSources[i].GetAvailability();
             i++;
-            sum += ammountpulledfromeach;
         }
-
-        if (sum <= WaterConsumptionRate)
-            WaterDistributionRate = sum;
-        else
+        i = 0;
+        if(sum <= WaterConsumptionRate && sum <= WaterTowers*WaterTowerScaling)
         {
-            i = 0;
-            double j = (double)WaterConsumptionRate / (double)sum;
+            WaterDistributionRate = sum;
             while (i < NumberofSources)
             {
-                AmmountPulledFromSources[i] = (int)(AmmountPulledFromSources[i] * j);
-                //Debug.Log(AmmountPulledFromSources[i]);
+                AmmountPulledFromSources[i] = WaterSources[i].GetAvailability();
                 i++;
-
             }
-            //Debug.Log(j);
-
+        }
+        else if (sum <= WaterConsumptionRate && sum >= WaterTowers * WaterTowerScaling
+              || sum >= WaterConsumptionRate && sum >= WaterTowers * WaterTowerScaling && WaterConsumptionRate >= WaterTowers * WaterTowerScaling)
+        {
+            WaterDistributionRate = (int)(WaterTowers * WaterTowerScaling);
+            while (i < NumberofSources)
+            {
+                AmmountPulledFromSources[i] = WaterSources[i].GetAvailability() * WaterDistributionRate / sum;
+                i++;
+            }
+        }
+        else if(sum >= WaterConsumptionRate && sum <= WaterTowers * WaterTowerScaling
+            ||  sum >= WaterConsumptionRate && sum >= WaterTowers * WaterTowerScaling && WaterConsumptionRate <= WaterTowers * WaterTowerScaling)
+        {
             WaterDistributionRate = WaterConsumptionRate;
+            while(i < NumberofSources)
+            {
+                AmmountPulledFromSources[i] = WaterSources[i].GetAvailability()*WaterDistributionRate/sum;
+                i++;
+            }
         }
     }
 
@@ -157,37 +145,55 @@ public class BackgroundData
     public void SetEvent(int type, int intensity)
     {
             //rain
-            /*if (type == 0)
+            if (type == 0)
             {
                 int i = 0;
                 CurrentEvent = "Rain";
-                while (WaterSources[i] != null)
+                while (i<NumberofSources)
                 {
-                    WaterSources[i].RefillReserve(intensity);
+                    if(WaterSources[i].type!="Shipment")
+                        WaterSources[i].RefillReserve(intensity);
+                    i++;
                 }
-            }*/
-            //drought
+            }
+            //Warm Front
             if (type == 1)
             {
-                //CurrentEvent = "Drought";
-                Temperature += (int)(intensity * DroughtEventScaling);
+                int temp = Temperature + (int)(intensity * TempEventScaling);
+                if (temp < MaxTemp)
+                    Temperature = temp;
+                else
+                    Temperature = MaxTemp;
             }
             //Cold Front
             else if (type == 2)
             {
                 //CurrentEvent = "Cold Front";
-                Temperature -= (int)(intensity * DroughtEventScaling);
+                int temp = Temperature - (int)(intensity * TempEventScaling);
+                if (temp > MinTemp)
+                    Temperature = temp;
+                else
+                    Temperature = MinTemp;
             }
             //Migration in
             else if (type == 3)
             {
-                IncrementPopulation((int)(intensity * MigrationEventScaling));
+                int pop = Population + (int)(intensity * MigrationEventScaling);
+                if (pop < MaxPop)
+                    IncrementPopulation((int)(intensity * MigrationEventScaling));
+                else
+                    SetPopulation(MaxPop);
+
             }
             //Migration out
-            else if (type == 3)
+            else if (type == 4)
             {
-                IncrementPopulation((int)(intensity * MigrationEventScaling));
-            }
+            int pop = Population - (int)(intensity * MigrationEventScaling);
+            if (pop > MinPop)
+                IncrementPopulation((int)(-1*intensity * MigrationEventScaling));
+            else
+                SetPopulation(MinPop);
+        }
         //Filtration breakdown
         /* else if(type == 2)
          {
