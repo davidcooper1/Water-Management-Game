@@ -284,6 +284,7 @@ public class GameManager : MonoBehaviour {
 
         if (CurrentRainEvent < 2 && CurrentRainEventTurnCount == 0)
         {
+            RainInterval = AverageRainInterval;
             CurrentRainEvent = 8;
             CurrentRainEventTurnCount = Random.Range(2, 8);
         }
