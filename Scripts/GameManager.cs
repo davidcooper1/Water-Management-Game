@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
     int gamelength, turn;
     private int RainTurnCount;
     private int RainInterval;
-    private int AverageRainInterval;
+    private int AverageRainInterval, AverageTemperature;
     private int CurrentTempEvent = 2, CurrentTempEventTurnCount, CurrentRainEvent = 2, CurrentRainEventTurnCount, CurrentPopEvent = 2, CurrentPopEventTurnCount;
     private int LoseCounter=10;
 
@@ -34,11 +34,13 @@ public class GameManager : MonoBehaviour {
     void Start () {
         gamelength = 50;
         turn = 0;
-        data = new BackgroundData(10000, 80, 10000, 3);
+        //initializing default game variable values
+        data = new BackgroundData(10000, Random.Range(60,80), 10000, 3);
+        AverageTemperature = data.Temperature;
         //lake
-        data.WaterSources[0]= new WaterSource("Lake",100000, 7000, .5, .5);
+        data.WaterSources[0]= new WaterSource("Lake",100000, 7000, 1, 1);
         //aquifer
-        data.WaterSources[1] = new WaterSource("Aquifer",100000, 7000, .5, .5);
+        data.WaterSources[1] = new WaterSource("Aquifer",100000, 7000, 1, 1);
         //shipments
         data.WaterSources[2] = new WaterSource("Shipment",0, 0, 1, 10);
 
@@ -100,60 +102,79 @@ public class GameManager : MonoBehaviour {
                 Rain.enabled = false;
                 RainTurnCount--;
             }
-            if(CurrentTempEvent == 0)
+            if (CurrentTempEventTurnCount != 0 && CurrentTempEvent < 2)
             {
-                data.SetEvent(1,Random.Range(5,7));
-                CurrentTempEventTurnCount--;
-                WarmFront.enabled = true;
-                ColdFront.enabled = false;
-            }
-            else if(CurrentTempEvent == 1)
-            {
-                data.SetEvent(2, Random.Range(5, 7));
-                CurrentTempEventTurnCount--;
-                WarmFront.enabled = false;
-                ColdFront.enabled = true;
+                if (CurrentTempEvent == 0)
+                {
+                    data.SetEvent(1, Random.Range(5, 7));
+                    CurrentTempEventTurnCount--;
+                    WarmFront.enabled = true;
+                    ColdFront.enabled = false;
+                }
+                else if (CurrentTempEvent == 1)
+                {
+                    data.SetEvent(2, Random.Range(5, 7));
+                    CurrentTempEventTurnCount--;
+                    WarmFront.enabled = false;
+                    ColdFront.enabled = true;
+                }
             }
             else
             {
+                if (CurrentTempEventTurnCount > 0)
+                    CurrentTempEventTurnCount--;
+                if (data.Temperature < AverageTemperature)
+                    data.SetEvent(1, Random.Range(3, 5));
+                else
+                    data.SetEvent(2, Random.Range(3, 5));
                 WarmFront.enabled = false;
                 ColdFront.enabled = false;
             }
 
-            if(CurrentPopEvent == 0)
+            if (CurrentPopEventTurnCount != 0 && CurrentPopEvent < 2)
             {
-                data.SetEvent(3, Random.Range(5000, 10000));
-                CurrentPopEventTurnCount--;
-                MigrationIn.enabled = true;
-                MigrationOut.enabled = false;
-            }
-            else if(CurrentPopEvent == 1)
-            {
-                data.SetEvent(4, Random.Range(5000, 10000));
-                CurrentPopEventTurnCount--;
-                MigrationIn.enabled = false;
-                MigrationOut.enabled = true;
+                if (CurrentPopEvent == 0)
+                {
+                    data.SetEvent(3, Random.Range(1000, 5000));
+                    CurrentPopEventTurnCount--;
+                    MigrationIn.enabled = true;
+                    MigrationOut.enabled = false;
+                }
+                else if (CurrentPopEvent == 1)
+                {
+                    data.SetEvent(4, Random.Range(1000, 5000));
+                    CurrentPopEventTurnCount--;
+                    MigrationIn.enabled = false;
+                    MigrationOut.enabled = true;
+                }
             }
             else
             {
+                if (CurrentPopEventTurnCount > 0)
+                    CurrentPopEventTurnCount--;
                 MigrationIn.enabled = false;
                 MigrationOut.enabled = false;
             }
 
-            if (CurrentRainEvent == 0)
+            if (CurrentRainEventTurnCount != 0 && CurrentRainEvent < 2)
             {
-                Drought.enabled = true;
-                Monsoon.enabled = false;
-                CurrentRainEventTurnCount--;
-            }
-            else if(CurrentRainEvent ==1)
-            {
-                Drought.enabled = false;
-                Monsoon.enabled = true;
-                CurrentRainEventTurnCount--;
+                if (CurrentRainEvent == 0)
+                {
+                    Drought.enabled = true;
+                    Monsoon.enabled = false;
+                    CurrentRainEventTurnCount--;
+                }
+                else if (CurrentRainEvent == 1)
+                {
+                    Drought.enabled = false;
+                    Monsoon.enabled = true;
+                    CurrentRainEventTurnCount--;
+                }
             }
             else
             {
+                if (CurrentRainEventTurnCount > 0)
+                    CurrentRainEventTurnCount--;
                 Drought.enabled = false;
                 Monsoon.enabled = false;
             }
@@ -163,10 +184,13 @@ public class GameManager : MonoBehaviour {
             data.IncrementFund();
             turn++;
             GenerateEvents();
+            Debug.Log("Current Rain Event: " + CurrentRainEvent + ". Turn Count: " + CurrentRainEventTurnCount + 
+                "| Current Pop Event: " + CurrentPopEvent + ". Turn Count: " + CurrentPopEventTurnCount + 
+                "| Current Temp Event: " + CurrentTempEvent + ". Turn Count: " + CurrentTempEventTurnCount);
         }
         else if(turn == gamelength)
         {
-            WinText.text = "You Win";
+            WinText.enabled = true;
         }
 
     }
@@ -214,47 +238,76 @@ public class GameManager : MonoBehaviour {
         // 0 = Migration in, 1 = Migration out
         int PopEvents = Random.Range(0, 7);
         //0 = Drought, 1 = Monsoon
-        int RainEvents = Random.Range(0,7);
-        if (CurrentTempEventTurnCount == 0 && TempEvents < 2)
+        int RainEvents = Random.Range(0, 7);
+        //cooldown
+        if (CurrentTempEvent < 2 && CurrentTempEventTurnCount == 0)
         {
-            CurrentTempEvent = TempEvents;
-            CurrentTempEventTurnCount = Random.Range(5, 8);
+            CurrentTempEvent = 8;
+            CurrentTempEventTurnCount = Random.Range(2, 8);
 
         }
-        else
+        else if(CurrentTempEventTurnCount == 0)
         {
-            CurrentTempEvent = TempEvents;
-            CurrentTempEventTurnCount = 0;
-        }
-        if (CurrentPopEventTurnCount == 0 && PopEvents < 2)
-        {
-            CurrentPopEvent = PopEvents;
-            CurrentPopEventTurnCount = Random.Range(1, 2);
-
-        }
-        else
-        {
-            CurrentPopEvent = PopEvents;
-            CurrentPopEventTurnCount = 0;
-        }
-        if (CurrentRainEventTurnCount == 0 && RainEvents < 2)
-        {
-            CurrentRainEvent = RainEvents;
-            CurrentRainEventTurnCount = Random.Range(5, 8);
-            if (RainEvents == 0)
+            if (TempEvents < 2)
             {
-                RainInterval = AverageRainInterval * 2;
+                CurrentTempEvent = TempEvents;
+                CurrentTempEventTurnCount = Random.Range(4, 7);
+
             }
-            else
-                RainInterval = AverageRainInterval / 2;
+            else if (TempEvents > 2)
+            {
+                CurrentTempEvent = TempEvents;
+                CurrentTempEventTurnCount = 0;
+            }
 
         }
-        else
+
+        if(CurrentPopEvent < 2 && CurrentPopEventTurnCount == 0)
         {
-            CurrentRainEvent = RainEvents;
-            CurrentRainEventTurnCount = 0;
+            CurrentPopEvent = 8;
+            CurrentPopEventTurnCount = Random.Range(2, 8);
+        }
+        else if (CurrentPopEventTurnCount == 0)
+        {
+            if (PopEvents < 2)
+            {
+                CurrentPopEvent = PopEvents;
+                CurrentPopEventTurnCount = Random.Range(1, 3);
+
+            }
+            else if (PopEvents > 2)
+            {
+                CurrentPopEvent = PopEvents;
+                CurrentPopEventTurnCount = 0;
+            }
         }
 
+        if (CurrentRainEvent < 2 && CurrentRainEventTurnCount == 0)
+        {
+            CurrentRainEvent = 8;
+            CurrentRainEventTurnCount = Random.Range(2, 8);
+        }
+        else if (CurrentRainEventTurnCount == 0)
+        {
+            if (RainEvents < 2)
+            {
+                CurrentRainEvent = RainEvents;
+                CurrentRainEventTurnCount = Random.Range(4, 7);
+                if (RainEvents == 0)
+                {
+                    RainInterval = AverageRainInterval * 2;
+                }
+                else
+                    RainInterval = AverageRainInterval / 2;
+
+            }
+            else if (RainEvents > 2)
+            {
+                RainInterval = AverageRainInterval;
+                CurrentRainEvent = RainEvents;
+                CurrentRainEventTurnCount = 0;
+            }
+        }
 
 
 

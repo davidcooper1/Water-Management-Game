@@ -38,7 +38,7 @@ public class WaterSource{
     {
         Reserve += (int) (a*RefillScale);
         Availability += (int)(a * RefillScale);
-        RefillScale = RefillScale * .8;
+        RefillScale = RefillScale * .9;
     }
 
     //refilling reserve, base on rain
