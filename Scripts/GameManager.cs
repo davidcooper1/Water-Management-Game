@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 
     //texts
     public Text Population, WaterConsumptionRate, WaterDistributionRate, Temperature, 
-        Turn, Fund, TaxRevenue, WinText, LoseText, WTLevel, LR, LK, AR, AQ, SP,
+        Turn, Fund, TaxRevenue, WinText, LoseText, WDRMax, LR, LK, AR, AQ, SP,
         Drought, Monsoon, WarmFront, ColdFront, MigrationIn, MigrationOut, Rain, LoseCounterText;
 
     //model objects
@@ -269,7 +269,7 @@ public class GameManager : MonoBehaviour {
         Turn.text = "Turn: " + turn.ToString();
         Fund.text = "Fund: " + data.Fund.ToString();
         TaxRevenue.text = "Tax Revenue: " + data.TaxRevenue.ToString();
-        WTLevel.text = "Water Towers Level: " + data.WaterTowers.ToString();
+        WDRMax.text = "WDRMax: " + data.MaxWaterDistributionRate.ToString();
         LR.text = "Lake Reserve: " + data.WaterSources[0].GetReserve().ToString();
         LK.text = "Lake Availability: " + data.WaterSources[0].GetAvailability().ToString();
         AR.text = "Aquifer Reserve: " + data.WaterSources[1].GetReserve().ToString();

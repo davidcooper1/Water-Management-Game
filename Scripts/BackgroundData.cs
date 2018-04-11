@@ -19,7 +19,7 @@ public class BackgroundData
 
     // Upgradables and Event
     public WaterSource[] WaterSources;
-    public int WaterTowers = 1;
+    public int WaterTowers = 1, MaxWaterDistributionRate;
     string CurrentEvent;
 
 
@@ -33,6 +33,7 @@ public class BackgroundData
         Fund = fund;
         SetPopulation(population);
         NumberofSources = NumberofWaterSources;
+        MaxWaterDistributionRate = (int)(WaterTowers * WaterTowerScaling);
     }
 
     // Increment Fund
@@ -61,6 +62,7 @@ public class BackgroundData
     {
 
         WaterTowers++;
+        MaxWaterDistributionRate = (int)(WaterTowerScaling * WaterTowers);
         CalculateWaterDistributionRate();
 
     }
@@ -75,7 +77,7 @@ public class BackgroundData
             i++;
         }
         i = 0;
-        if(sum <= WaterConsumptionRate && sum <= WaterTowers*WaterTowerScaling)
+        if(sum <= WaterConsumptionRate && sum <= MaxWaterDistributionRate)
         {
             WaterDistributionRate = sum;
             while (i < NumberofSources)
@@ -84,18 +86,18 @@ public class BackgroundData
                 i++;
             }
         }
-        else if (sum <= WaterConsumptionRate && sum >= WaterTowers * WaterTowerScaling
-              || sum >= WaterConsumptionRate && sum >= WaterTowers * WaterTowerScaling && WaterConsumptionRate >= WaterTowers * WaterTowerScaling)
+        else if (sum <= WaterConsumptionRate && sum >= MaxWaterDistributionRate
+              || sum >= WaterConsumptionRate && sum >= MaxWaterDistributionRate && WaterConsumptionRate >= MaxWaterDistributionRate)
         {
-            WaterDistributionRate = (int)(WaterTowers * WaterTowerScaling);
+            WaterDistributionRate = (int)(MaxWaterDistributionRate);
             while (i < NumberofSources)
             {
                 AmmountPulledFromSources[i] = WaterSources[i].GetAvailability() * WaterDistributionRate / sum;
                 i++;
             }
         }
-        else if(sum >= WaterConsumptionRate && sum <= WaterTowers * WaterTowerScaling
-            ||  sum >= WaterConsumptionRate && sum >= WaterTowers * WaterTowerScaling && WaterConsumptionRate <= WaterTowers * WaterTowerScaling)
+        else if(sum >= WaterConsumptionRate && sum <= MaxWaterDistributionRate
+            ||  sum >= WaterConsumptionRate && sum >= MaxWaterDistributionRate && WaterConsumptionRate <= MaxWaterDistributionRate)
         {
             WaterDistributionRate = WaterConsumptionRate;
             while(i < NumberofSources)
