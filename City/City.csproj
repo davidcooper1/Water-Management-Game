@@ -266,9 +266,6 @@
     <Compile Include="Assets\New Folder\Scripts\SelectOnInput.cs" />
     <Compile Include="Assets\New Folder\Scripts\ShowSliderValue.cs" />
     <Compile Include="Assets\New Folder\Scripts\TiltWindow.cs" />
-    <Compile Include="Assets\NewBehaviourScript.cs" />
-    <Compile Include="Assets\ObjectHighlighter.cs" />
-    <Compile Include="Assets\OnTouchDown.cs" />
     <Compile Include="Assets\Scripts\BackgroundData.cs" />
     <Compile Include="Assets\Scripts\CityController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />

@@ -8,18 +8,12 @@ Confidential and Proprietary - Protected under copyright and other laws.
 
 using UnityEngine;
 using Vuforia;
-using UnityEngine.UI;
 
 /// <summary>
 ///     A custom handler that implements the ITrackableEventHandler interface.
 /// </summary>
 public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 {
-
-    public Transform TheCanvas;
-
-
-
     #region PRIVATE_MEMBER_VARIABLES
 
     protected TrackableBehaviour mTrackableBehaviour;
@@ -32,10 +26,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
     {
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
-        {
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
-        }
-        TheCanvas.gameObject.SetActive(false);
     }
 
     #endregion // UNTIY_MONOBEHAVIOUR_METHODS
@@ -76,13 +67,12 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
 
     #region PRIVATE_METHODS
 
-    private void OnTrackingFound()
+    protected virtual void OnTrackingFound()
     {
         var rendererComponents = GetComponentsInChildren<Renderer>(true);
         var colliderComponents = GetComponentsInChildren<Collider>(true);
         var canvasComponents = GetComponentsInChildren<Canvas>(true);
         Terrain[] terrainComponents = GetComponentsInChildren<Terrain>(true);
-
 
         // Enable rendering:
         foreach (var component in rendererComponents)
@@ -100,21 +90,15 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             component.enabled = true;
 
 
-        TheCanvas.gameObject.SetActive(true);
-
-
-
-
     }
 
 
-    private void OnTrackingLost()
+    protected virtual void OnTrackingLost()
     {
         var rendererComponents = GetComponentsInChildren<Renderer>(true);
         var colliderComponents = GetComponentsInChildren<Collider>(true);
         var canvasComponents = GetComponentsInChildren<Canvas>(true);
         Terrain[] terrainComponents = GetComponentsInChildren<Terrain>(true);
-
 
         // Disable rendering:
         foreach (var component in rendererComponents)
@@ -130,10 +114,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
 
         foreach (var component in terrainComponents)
             component.enabled = false;
-
-
-        TheCanvas.gameObject.SetActive(true);
-
     }
 
     #endregion // PRIVATE_METHODS
