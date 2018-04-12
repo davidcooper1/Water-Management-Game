@@ -13,8 +13,6 @@ public class CityController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        SetLakeMax(100);
-        SetLakeCurrent(100);
         SetRainEnabled(false);
 	}
 	
@@ -22,6 +20,7 @@ public class CityController : MonoBehaviour {
 	void Update () {
         if (lakeUpdateNeeded) {
             Vector3 oldLakePosition = Lake.transform.position;
+            Debug.Log("Calc: " + (lakeCurrent / lakeMax) + " Max: " + lakeMax);
             Lake.transform.position = new Vector3(oldLakePosition.x, 6 + 8 * (lakeCurrent / lakeMax), oldLakePosition.z);
             lakeUpdateNeeded = false;
         }
@@ -30,6 +29,7 @@ public class CityController : MonoBehaviour {
     public void SetLakeMax(float newMax) {
         lakeMax = newMax;
         lakeUpdateNeeded = true;
+        Debug.Log("Test: " + lakeMax);
     }
 
     public void SetLakeCurrent(float newCurrent) {
