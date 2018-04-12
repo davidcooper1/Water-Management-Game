@@ -38,9 +38,9 @@ public class GameManager : MonoBehaviour {
         data = new BackgroundData(10000, Random.Range(60,80), 10000, 3);
         AverageTemperature = data.Temperature;
         //lake
-        data.WaterSources[0]= new WaterSource("Lake",100000, 7000, 1, 1);
+        data.WaterSources[0]= new WaterSource("Lake",100000, 5000, 1, 1);
         //aquifer
-        data.WaterSources[1] = new WaterSource("Aquifer",100000, 7000, 1, 1);
+        data.WaterSources[1] = new WaterSource("Aquifer",100000, 5000, 1, 1);
         //shipments
         data.WaterSources[2] = new WaterSource("Shipment",0, 0, 1, 10);
 
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour {
             if (RainTurnCount == 0)
             {
 
-                data.SetEvent(0, Random.Range(5000, 10000));
+                data.SetEvent(0, Random.Range(10, 20));
                 RainTurnCount = RainInterval;
                 Rain.enabled = true;
             }
@@ -284,6 +284,7 @@ public class GameManager : MonoBehaviour {
 
         if (CurrentRainEvent < 2 && CurrentRainEventTurnCount == 0)
         {
+            RainInterval = AverageRainInterval;
             CurrentRainEvent = 8;
             CurrentRainEventTurnCount = Random.Range(2, 8);
         }

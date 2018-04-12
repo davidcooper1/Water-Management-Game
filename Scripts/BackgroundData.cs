@@ -9,12 +9,12 @@ public class BackgroundData
         ;
 
     // Gameplay Variables
-    public int TaxRevenue, Population, Temperature = 70, Fund,
+    public int TaxRevenue, Population, Temperature, Fund,
         WaterConsumptionRate, WaterDistributionRate;
 
     // private variables use for calculation
     private int[] AmmountPulledFromSources;
-    private int NumberofSources;
+    private int NumberofSources, AverageTemperature;
     private int MaxTemp=120, MinTemp=20, MaxPop = 20000, MinPop = 5000;
 
     // Upgradables and Event
@@ -30,6 +30,7 @@ public class BackgroundData
         AmmountPulledFromSources = new int[NumberofWaterSources];
 
         Temperature = temperature;
+        AverageTemperature = Temperature;
         Fund = fund;
         SetPopulation(population);
         NumberofSources = NumberofWaterSources;
@@ -46,7 +47,7 @@ public class BackgroundData
     {
         Population += a;
         TaxRevenue = (int)(Population * TaxRevenueScaling);
-        WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling + Temperature * WaterConsumptionRateTempScaling);
+        WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling * (double)Temperature / (double)AverageTemperature);
 
     }
 
@@ -54,7 +55,7 @@ public class BackgroundData
     {
         Population = newpop;
         TaxRevenue = (int)(Population * TaxRevenueScaling);
-        WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling + Temperature * WaterConsumptionRateTempScaling);
+        WaterConsumptionRate = (int)(Population * WaterConsumptionRatePopScaling * (double)Temperature / (double)AverageTemperature);
     }
 
     // Upgrading water tower, also changes WaterDistributionRate, and set AmmountPulled
