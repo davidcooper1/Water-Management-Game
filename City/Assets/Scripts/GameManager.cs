@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         WarmFront.SetActive(false);
         ColdFront.SetActive(false);
         LoseText.SetActive(false);
-        //LoseCounterText.text = "Lose Counter: 10";
+        LoseCounterText.text = "Lives: 10";
         //buttons
         Endturn.onClick.AddListener(EndturnListener);
         LakeReserve.maxValue = data.WaterSources[0].GetReserve();
@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
             else if (data.WaterDistributionRate < data.WaterConsumptionRate)
             {
                 LoseCounter--;
-                //LoseCounterText.text = "Lose Counter: " + LoseCounter.ToString();
+                LoseCounterText.text = "Lives: " + LoseCounter.ToString();
             }
             data.ExtractWaterSources();
             Debug.Log("Lake Reserve: " + data.WaterSources[0].GetReserve() + " Max Reserve: " + 100000);
