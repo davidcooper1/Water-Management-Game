@@ -7285,8 +7285,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 726830909}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -120.85619, y: 9.8698635, z: -101.74789}
+  m_LocalRotation: {x: 0.15846215, y: 0.7665037, z: 0.11749968, w: -0.6111921}
+  m_LocalPosition: {x: 548.30994, y: -422.21985, z: 24.9234}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10482,7 +10482,7 @@ MonoBehaviour:
   Invest2000: {fileID: 1056932474}
   Invest5000: {fileID: 1045397431}
   Population: {fileID: 1886295550}
-  WaterConsumptionRate: {fileID: 1915332061}
+  WaterConsumptionRate: {fileID: 1517268857}
   WaterDistributionRate: {fileID: 1915332061}
   Temperature: {fileID: 1588209687}
   Turn: {fileID: 51704355}
