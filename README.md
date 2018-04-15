@@ -1,32 +1,28 @@
 # Water Management Game
-=============
 
 ## Video Demonstration
-============
 TODO: Add link to video
 
 ## How to Install the Windows 10 App
-============
-1.) Download the repository ZIP.
-2.) Unzip the repository.
-3.) Open the City_X.X.X.X_Master_Test folder.
-4.) Install everything in the Dependencies folder like any other application.
-5.) Trust the certificate associated with the City_X.X.X.X_x86_Master.appxbundle.
-  a.) Right click City_X.X.X.X_x86_Master.appxbundle.
-  b.) Click Properties.
-  c.) Go to the Digital Signatures tab.
-  d.) Select the signature then click Details.
-  e.) Click View Certificate.
-  f.) Click Install Certificate.
-  g.) Select the Local Machine option and click Next.
-  h.) Select "Place all certificates in the following store" and click Browse.
-  i.) Scroll down and select "Trusted People" then click OK.
-  j.) Click Next then Finish.
-  k.) Close all other dialogs by clicking OK.
-6.) Install the City_X.X.X.X_x86_Master.appxbundle like any other application.
+1. Download the repository ZIP.
+2. Unzip the repository.
+3. Open the City_X.X.X.X_Master_Test folder.
+4. Install everything in the Dependencies folder like any other application.
+5. Trust the certificate associated with the City_X.X.X.X_x86_Master.appxbundle.
+  * Right click City_X.X.X.X_x86_Master.appxbundle.  
+  *  Click Properties.
+  * Go to the Digital Signatures tab.
+  * Select the signature then click Details.
+  * Click View Certificate.
+  * Click Install Certificate.
+  * Select the Local Machine option and click Next.
+  * Select "Place all certificates in the following store" and click Browse.
+  * Scroll down and select "Trusted People" then click OK.
+  * Click Next then Finish.
+  * Close all other dialogs by clicking OK.
+6. Install the City_X.X.X.X_x86_Master.appxbundle like any other application.
 
 ## Project Report
-============
 
 ### Things that we learned...
 * Creating a Unity Project
