@@ -58,22 +58,21 @@ TODO: Add link to video
   - UI
 
 ### How the Game Works
-* The player can invest in different infrastructure such as:\
-  TODO: Add screenshots for various buttons.
+* The player can invest in different infrastructure such as:
+  <br>![UI Buttons](https://puu.sh/A3XM0/5f0da2bc12.png)
   - Water Tower 
   - Water Sources
-  TODO: Add screenshots for the water source bars.
   - Water Shipments
-  TODO: Add screenshots of water shipments bar.
+  <br>![Water Bars](https://puu.sh/A3XMz/6be02f2154.png)
 * The player must meet the water consumption needs of the city.
-  TODO: Add screenshot with variable pane.
+  <br>![Var Pane](https://puu.sh/A3XN0/8bf1aef9d9.png)
   - i.e. Water distribution and supply must meet or exceed water consumption needs.
   - The player loses a life for each turn this requirement is not fulfilled.
   - After the player loses 10 lives then the game is over.
   - The game is considered won when the player has lasted until turn 50.
 * Money comes in the form of taxes each turn and varies based on the population amount.
 * Different events can occur that affect the flow of gameplay.
-  TODO: Add screenshots of event pane.
+  <br>![Event Pane](https://puu.sh/A3Y2G/dbca60f760.png)
   - These events affect:
     * Populaion through migration events.
     * Temperature through cold and warm fronts.
@@ -84,10 +83,10 @@ TODO: Add link to video
 * City was built using two different Low-Poly European City Packs that were free on the Unity Asset Store.
   - [Decorations Set](https://assetstore.unity.com/packages/3d/environments/urban/lowpoly-modern-city-decorations-set-66070)
   - [Buildings Set](https://assetstore.unity.com/packages/3d/environments/urban/lowpoly-modern-city-buildings-set-64427)
-  TODO: Add a screenshot of the city.
+  ![City SS](https://puu.sh/A3XOb/033b99b502.png)
 * Everything lies on a terrain with a hole left for the lake.
 * Lake water was made using Advanced Water prefab in the unity standard assets package.
-  TODO: Add a screenshot of the lake.
 * Cloud was a model downloaded off Sketchfab. [Cloud Model](https://sketchfab.com/models/116f49c23c4347eba340d0f59b0601f7)
 * Rain was created using the Unity Particle System.
-  TODO: Add a screenshot of the rain.
+  <br>![Rain Image](https://puu.sh/A3XPz/212214c353.png)
+* The Lake moves up and down based on the amount of water in it.
