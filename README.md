@@ -21,6 +21,8 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
   * Click Next then Finish.
   * Close all other dialogs by clicking OK.
 6. Install the City_X.X.X.X_x86_Master.appxbundle like any other application.
+7. Print out this image to use for the AR target of the application.
+![Image Target](http://www.vergium.com/wp-content/uploads/2017/04/vuforia_stones_vergium.jpg)
 
 ## Project Report
 
