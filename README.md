@@ -68,7 +68,7 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
   - The player loses a life for each turn this requirement is not fulfilled.
   - After the player loses 10 lives then the game is over.
   - The game is considered won when the player has lasted until turn 50.
-* The player can invest in different infrastructure to manipulate water consumption:
+* The player can invest in different infrastructure to manipulate Water Distribution:
   <br>![UI Buttons](https://puu.sh/A3XM0/5f0da2bc12.png)
   - Water Tower 
      * Investments increases water distribution maximum.
