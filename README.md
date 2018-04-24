@@ -60,18 +60,23 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
   - UI
 
 ### How the Game Works
-* The player can invest in different infrastructure such as:
-  <br>![UI Buttons](https://puu.sh/A3XM0/5f0da2bc12.png)
-  - Water Tower 
-  - Water Sources
-  - Water Shipments
-  <br>![Water Bars](https://puu.sh/A3XMz/6be02f2154.png)
-* The player must meet the water consumption needs of the city.
+* The player must meet the water consumption needs of the city through a turn base game.
   <br>![Var Pane](https://puu.sh/A3XN0/8bf1aef9d9.png)
   - i.e. Water distribution and supply must meet or exceed water consumption needs.
+  - Water consumption is dependent upon temperature and population
+    * Higher temperature and population means higher water consumption, and vice versa.
   - The player loses a life for each turn this requirement is not fulfilled.
   - After the player loses 10 lives then the game is over.
   - The game is considered won when the player has lasted until turn 50.
+* The player can invest in different infrastructure to manipulate water consumption:
+  <br>![UI Buttons](https://puu.sh/A3XM0/5f0da2bc12.png)
+  - Water Tower 
+     * Investments increases water distribution maximum.
+  - Water Sources 
+     * Investments increases water availability, the maximum ammount to be drawn from each source.
+     * Availability cannot exceed the water source's reserve.
+  - Water Shipments
+     * Investment make available a supply of water that is not refilled by rain.
 * Money comes in the form of taxes each turn and varies based on the population amount.
 * Different events can occur that affect the flow of gameplay.
   <br>![Event Pane](https://puu.sh/A3Y2G/dbca60f760.png)
@@ -79,7 +84,7 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
     * Populaion through migration events.
     * Temperature through cold and warm fronts.
     * Rain frequency through droughts and monsoons.
-  - Water sources are replenished slightly on rain events.
+  - Water sources' reserves are replenished slightly on rain events.
 
 ### Modeling the City
 * City was built using two different Low-Poly European City Packs that were free on the Unity Asset Store.
