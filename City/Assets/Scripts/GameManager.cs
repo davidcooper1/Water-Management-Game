@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     //texts
     public Text Population, WaterConsumptionRate, WaterDistributionRate, Temperature,
-        Turn, Fund, TaxRevenue, WDRMax, LK, AQ, LoseCounterText;
+        Turn, Fund, TaxRevenue, WDRMax, LK, AQ, LivesCounterText;
     public CityController City;
     public Slider LakeReserve, AquiferReserve, ShipmentReserve;
     public GameObject Drought, Monsoon, WarmFront, ColdFront, MigrationIn, MigrationOut, WinText, LoseText;
@@ -31,7 +31,9 @@ public class GameManager : MonoBehaviour
     private int RainInterval;
     private int AverageRainInterval, AverageTemperature;
     private int CurrentTempEvent = 2, CurrentTempEventTurnCount, CurrentRainEvent = 2, CurrentRainEventTurnCount, CurrentPopEvent = 2, CurrentPopEventTurnCount;
-    private int LoseCounter = 10;
+    private int LivesCounter = 10;
+    private bool gameOver = false;
+    private bool gameWon = false;
 
     //backup data for undo
 
@@ -40,6 +42,8 @@ public class GameManager : MonoBehaviour
     {
         gamelength = 50;
         turn = 0;
+        LivesCounter = 10;
+     
         //initializing default game variable values
         data = new BackgroundData(10000, Random.Range(60, 80), 10000, 3);
         AverageTemperature = data.Temperature;
@@ -69,7 +73,7 @@ public class GameManager : MonoBehaviour
         WarmFront.SetActive(false);
         ColdFront.SetActive(false);
         LoseText.SetActive(false);
-        LoseCounterText.text = "Lives: 10";
+        LivesCounterText.text = ": 10";
         //buttons
         Endturn.onClick.AddListener(EndturnListener);
         LakeReserve.maxValue = data.WaterSources[0].GetReserve();
@@ -92,17 +96,20 @@ public class GameManager : MonoBehaviour
     //button listeners
     private void EndturnListener()
     {
+        if (gameOver)
+            return;
         if (turn < gamelength)
         {
-            if (LoseCounter == 0)
+            if (LivesCounter == 0)
             {
                 LoseText.SetActive(true);
-                turn = 50;
+                gameOver = true;
+                gameWon = false;
             }
             else if (data.WaterDistributionRate < data.WaterConsumptionRate)
             {
-                LoseCounter--;
-                LoseCounterText.text = "Lives: " + LoseCounter.ToString();
+                LivesCounter--;
+                LivesCounterText.text = ": " + LivesCounter.ToString();
             }
             data.ExtractWaterSources();
             Debug.Log("Lake Reserve: " + data.WaterSources[0].GetReserve() + " Max Reserve: " + 100000);
@@ -113,11 +120,14 @@ public class GameManager : MonoBehaviour
 
                 data.SetEvent(0, Random.Range(10, 20));
                 RainTurnCount = RainInterval;
-                City.SetRainEnabled(true);
+                if (data.Temperature < 32)
+                    City.SetWeather(CityController.SNOW);
+                else
+                    City.SetWeather(CityController.RAIN);
             }
             else
             {
-                City.SetRainEnabled(false);
+                City.SetWeather(CityController.CLEAR);
                 RainTurnCount--;
             }
             if (CurrentTempEventTurnCount != 0 && CurrentTempEvent < 2)
@@ -157,6 +167,7 @@ public class GameManager : MonoBehaviour
                     CurrentPopEventTurnCount--;
                     MigrationIn.SetActive(true);
                     MigrationOut.SetActive(false);
+                    City.MigrationIn();
                 }
                 else if (CurrentPopEvent == 1)
                 {
@@ -164,6 +175,7 @@ public class GameManager : MonoBehaviour
                     CurrentPopEventTurnCount--;
                     MigrationIn.SetActive(false);
                     MigrationOut.SetActive(true);
+                    City.MigrationOut();
                 }
             }
             else
@@ -172,6 +184,7 @@ public class GameManager : MonoBehaviour
                     CurrentPopEventTurnCount--;
                 MigrationIn.SetActive(false);
                 MigrationOut.SetActive(false);
+                City.MigrationEnd();
             }
 
             if (CurrentRainEventTurnCount != 0 && CurrentRainEvent < 2)
@@ -202,13 +215,23 @@ public class GameManager : MonoBehaviour
             data.IncrementFund();
             turn++;
             GenerateEvents();
+
+            if (data.Temperature > 85)
+            {
+                City.SetSunOut(true);
+            } else
+            {
+                City.SetSunOut(false);
+            }
             Debug.Log("Current Rain Event: " + CurrentRainEvent + ". Turn Count: " + CurrentRainEventTurnCount +
                 "| Current Pop Event: " + CurrentPopEvent + ". Turn Count: " + CurrentPopEventTurnCount +
                 "| Current Temp Event: " + CurrentTempEvent + ". Turn Count: " + CurrentTempEventTurnCount);
         }
-        else if (turn == gamelength)
+        else if (turn >= gamelength)
         {
             WinText.SetActive(true);
+            gameOver = true;
+            gameWon = true;
         }
 
     }
@@ -342,13 +365,13 @@ public class GameManager : MonoBehaviour
     // Update set texts; Population, WaterConsumptionRate, WaterDistributionRate, Temperature, Turn, Fund, TaxRevenue
     void Update()
     {
-        Population.text = "Population: " + data.Population.ToString();
+        Population.text = ": " + data.Population.ToString();
         WaterConsumptionRate.text = "Consumption Rate: " + data.WaterConsumptionRate.ToString();
         WaterDistributionRate.text = "Distribution Rate: " + data.WaterDistributionRate.ToString();
-        Temperature.text = "Temperature: " + data.Temperature.ToString();
+        Temperature.text = ": " + data.Temperature.ToString();
         Turn.text = "Turn: " + turn.ToString();
-        Fund.text = "Fund: " + data.Fund.ToString();
-        TaxRevenue.text = "Tax Revenue: " + data.TaxRevenue.ToString();
+        Fund.text = ": " + data.Fund.ToString();
+        TaxRevenue.text = ": " + data.TaxRevenue.ToString();
         WDRMax.text = "WDRMax: " + data.MaxWaterDistributionRate.ToString();
         LakeReserve.value = data.WaterSources[0].GetReserve();
         LK.text = "Lake Availability: " + data.WaterSources[0].GetAvailability().ToString();
