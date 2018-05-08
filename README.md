@@ -27,22 +27,13 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 ## Project Report
 
 ### Things that we learned...
-* Creating a Unity Project
-* C#
-* Vuforia
-* Building a Windows 10 App
-* Group contributions on Github
+* Learned how to use sound in Unity
+* Learned Unity NavMeshAgent
 
-### Biggest Issues
-* Breaking project when trying to copy assets.
-* No redo button and cannot undo certain changes.
-* Exporting a Vuforia application (can only export as Windows 10, iOS, or Android App).
-* Could not build for mobile devices.
-    - Required Andriod tablet or XCode and a Mac.
-* Merging code to make finished game.
-* Pushing lots of files to Github.
-* Creating event generation script.
-* Getting the App Signed.
+### Issues
+* A few issues with lighting when changing scenes.
+* Sound was hard to get working the first time around.
+* NavMeshAgent took a bit of work to get going.
 
 ### Contributors
 * David Cooper
@@ -52,12 +43,14 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 ### Work Distribution
 
 * David Cooper
-  - City Modeling
-  - Building App
+  - Added more to city controller script including:
+     * Showing moving cars during migration events.
+     * Showing sun and changing lighting when temp got hot enough.
 * Tien Dang
-  - Script for Game Functionality
+  - Built new city design.
+  - Added cars to the city.
 * Olisa Omekam
-  - UI
+  - UI and sound.
 
 ### How the Game Works
 * The player must meet the water consumption needs of the city through a turn base game.
