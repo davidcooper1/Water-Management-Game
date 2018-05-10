@@ -10,6 +10,8 @@ public class CityController : MonoBehaviour {
     public GameObject RainCloud;
     public GameObject Sun;
     public GameObject Lighting;
+    public AudioSource RainSound;
+    public AudioSource CarSound;
     private float lakeMax;
     private float lakeCurrent;
     private bool lakeUpdateNeeded;
@@ -54,27 +56,31 @@ public class CityController : MonoBehaviour {
             RainParticles.SetActive(false);
             SnowParticles.SetActive(false);
             RainCloud.SetActive(false);
+            RainSound.Stop();
         } else if (weather == RAIN) {
-
             RainParticles.SetActive(true);
             SnowParticles.SetActive(false);
             RainCloud.SetActive(true);
+            RainSound.Play();
         } else if (weather == SNOW) {
             RainParticles.SetActive(false);
             SnowParticles.SetActive(true);
             RainCloud.SetActive(true);
+            RainSound.Stop();
         }
     }
 
     public void MigrationIn() {
         foreach (MovingCar car in incomingCars) {
             car.SetMoving(true);
+            CarSound.Play();
         }
     }
 
     public void MigrationOut() {
         foreach (MovingCar car in outgoingCars) {
             car.SetMoving(true);
+            CarSound.Play();
         }
     }
 
@@ -86,6 +92,7 @@ public class CityController : MonoBehaviour {
         foreach (MovingCar car in outgoingCars) {
             car.SetMoving(false);
         }
+        CarSound.Stop();
     }
 
     public void SetSunOut(bool enabled)
