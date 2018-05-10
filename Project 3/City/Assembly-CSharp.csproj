@@ -53,6 +53,7 @@
   <ItemGroup>
      <Compile Include="Assets\DisableTerrain.cs" />
      <Compile Include="Assets\Disap.cs" />
+     <Compile Include="Assets\MyUnitySingleton.cs" />
      <Compile Include="Assets\New Folder\Scripts\ActiveStateToggler.cs" />
      <Compile Include="Assets\New Folder\Scripts\ApplicationManager.cs" />
      <Compile Include="Assets\New Folder\Scripts\ChangeColor.cs" />
@@ -70,7 +71,10 @@
      <Compile Include="Assets\Scripts\BackgroundData.cs" />
      <Compile Include="Assets\Scripts\CityController.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\MovingCar.cs" />
      <Compile Include="Assets\Scripts\WaterSource.cs" />
+     <Compile Include="Assets\ShowHide.cs" />
+     <Compile Include="Assets\Vol.cs" />
      <Compile Include="Assets\Vuforia\Scripts\DefaultInitializationErrorHandler.cs" />
      <Compile Include="Assets\Vuforia\Scripts\DefaultTrackableEventHandler.cs" />
      <None Include="Assets\Vuforia\Shaders\ColoredLines.shader" />
