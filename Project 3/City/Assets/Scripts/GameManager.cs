@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
             if (RainTurnCount == 0)
             {
 
-                data.SetEvent(0, Random.Range(10, 20));
+                data.SetEvent(0, Random.Range(5, 15));
                 RainTurnCount = RainInterval;
                 if (data.Temperature < 32)
                     City.SetWeather(CityController.SNOW);
