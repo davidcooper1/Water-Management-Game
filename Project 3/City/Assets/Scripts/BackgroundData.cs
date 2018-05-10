@@ -4,8 +4,8 @@ using UnityEngine;
 public class BackgroundData
 {
     // Scaling Constants
-    double TaxRevenueScaling = .1, WaterConsumptionRatePopScaling = 1, WaterConsumptionRateTempScaling = 1,
-        WaterTowerScaling = 2000, TempEventScaling = 1, MigrationEventScaling = 1
+    double TaxRevenueScaling = .1, WaterConsumptionRatePopScaling = 50, WaterConsumptionRateTempScaling = 1,
+        WaterTowerScaling = 1000, TempEventScaling = 1, MigrationEventScaling = 1
         ;
 
     // Gameplay Variables
@@ -19,7 +19,7 @@ public class BackgroundData
 
     // Upgradables and Event
     public WaterSource[] WaterSources;
-    public int WaterTowers = 1, MaxWaterDistributionRate;
+    public int WaterTowers = 100, MaxWaterDistributionRate;
     string CurrentEvent;
 
 
@@ -34,7 +34,7 @@ public class BackgroundData
         Fund = fund;
         SetPopulation(population);
         NumberofSources = NumberofWaterSources;
-        MaxWaterDistributionRate = (int)(WaterTowers * WaterTowerScaling);
+        MaxWaterDistributionRate = (int)(WaterTowers * Random.Range(500,1500));
     }
 
     // Increment Fund
@@ -62,7 +62,7 @@ public class BackgroundData
     public void UpgradeWaterTowers(int spent, int ExtractMode)
     {
 
-        WaterTowers+= spent/1000;
+        WaterTowers+= spent/10;
         MaxWaterDistributionRate = (int)(WaterTowerScaling * WaterTowers);
         CalculateWaterDistributionRate(ExtractMode);
 
