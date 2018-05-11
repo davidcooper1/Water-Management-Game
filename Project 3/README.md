@@ -26,6 +26,17 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 
 ## Project Report
 
+### Improvements from Project 2
+* UI clarification
+* Added tutorial features
+* New city model
+* Added animations for events
+* Added sound
+ - events
+ - game music
+ - button clicks
+* Added new gameplay mechanics
+
 ### Things that we learned...
 
 
@@ -66,6 +77,7 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
      * Availability cannot exceed the water source's reserve.
   - Water Shipments
      * Investment make available a supply of water that is not refilled by rain.
+     *  Water Shipments prices are base on temperature.
 * Money comes in the form of taxes each turn and varies based on the population amount.
 * Different events can occur that affect the flow of gameplay.
   <br>![Event Pane](https://puu.sh/A3Y2G/dbca60f760.png)
@@ -74,9 +86,6 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
     * Temperature through cold and warm fronts.
     * Rain frequency through droughts and monsoons.
   - Water sources' reserves are replenished slightly on rain events.
-* New Mechanics:
-  - Water Shipments prices are base on temperature.
-  - Player can choose how they can extract water.
 
 ### Modeling the City
 * City was built using two different Low-Poly European City Packs that were free on the Unity Asset Store.
