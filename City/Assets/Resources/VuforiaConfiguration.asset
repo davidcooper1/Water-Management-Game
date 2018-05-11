@@ -44,6 +44,7 @@ MonoBehaviour:
       ContainsMagnet: 0
   databaseLoad:
     dataSetsToLoad:
+    - VuforiaMars_Images
     - example
     dataSetsToActivate:
     - example
