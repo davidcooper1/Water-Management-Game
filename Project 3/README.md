@@ -27,22 +27,10 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 ## Project Report
 
 ### Things that we learned...
-* Creating a Unity Project
-* C#
-* Vuforia
-* Building a Windows 10 App
-* Group contributions on Github
+
 
 ### Biggest Issues
-* Breaking project when trying to copy assets.
-* No redo button and cannot undo certain changes.
-* Exporting a Vuforia application (can only export as Windows 10, iOS, or Android App).
-* Could not build for mobile devices.
-    - Required Andriod tablet or XCode and a Mac.
-* Merging code to make finished game.
-* Pushing lots of files to Github.
-* Creating event generation script.
-* Getting the App Signed.
+
 
 ### Contributors
 * David Cooper
@@ -52,12 +40,13 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 ### Work Distribution
 
 * David Cooper
-  - City Modeling
-  - Building App
+  - Event animations and Event sounds
 * Tien Dang
-  - Script for Game Functionality
+  - City Modeling
+  - New Mechanics
 * Olisa Omekam
   - UI
+  - Sound
 
 ### How the Game Works
 * The player must meet the water consumption needs of the city through a turn base game.
@@ -85,15 +74,18 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
     * Temperature through cold and warm fronts.
     * Rain frequency through droughts and monsoons.
   - Water sources' reserves are replenished slightly on rain events.
+* New Mechanics:
+  - Water Shipments prices are base on temperature.
+  - Player can choose how they can extract water.
 
 ### Modeling the City
 * City was built using two different Low-Poly European City Packs that were free on the Unity Asset Store.
   - [Decorations Set](https://assetstore.unity.com/packages/3d/environments/urban/lowpoly-modern-city-decorations-set-66070)
   - [Buildings Set](https://assetstore.unity.com/packages/3d/environments/urban/lowpoly-modern-city-buildings-set-64427)
   ![City SS](https://puu.sh/A3XOb/033b99b502.png)
-* Everything lies on a terrain with a hole left for the lake.
+* Everything lies on a terrain with holes left for lakes.
 * Lake water was made using Advanced Water prefab in the unity standard assets package.
 * Cloud was a model downloaded off Sketchfab. [Cloud Model](https://sketchfab.com/models/116f49c23c4347eba340d0f59b0601f7)
 * Rain was created using the Unity Particle System.
   <br>![Rain Image](https://puu.sh/A3XPz/212214c353.png)
-* The Lake moves up and down based on the amount of water in it.
+* Lake water moves up and down based on the amount of water in it.
