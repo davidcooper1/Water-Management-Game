@@ -4,8 +4,8 @@ using UnityEngine;
 public class BackgroundData
 {
     // Scaling Constants
-    double TaxRevenueScaling = .1, WaterConsumptionRatePopScaling = 1, WaterConsumptionRateTempScaling = 1,
-        WaterTowerScaling = 2000, TempEventScaling = 1, MigrationEventScaling = 1
+    double TaxRevenueScaling = .1, WaterConsumptionRatePopScaling = 50, WaterConsumptionRateTempScaling = 1,
+        WaterTowerScaling = 1000, TempEventScaling = 1, MigrationEventScaling = 1
         ;
 
     // Gameplay Variables
@@ -19,7 +19,7 @@ public class BackgroundData
 
     // Upgradables and Event
     public WaterSource[] WaterSources;
-    public int WaterTowers = 1, MaxWaterDistributionRate;
+    public int WaterTowers = 100, MaxWaterDistributionRate;
     string CurrentEvent;
 
 
@@ -34,6 +34,7 @@ public class BackgroundData
         Fund = fund;
         SetPopulation(population);
         NumberofSources = NumberofWaterSources;
+		WaterTowers = Random.Range(50,150);
         MaxWaterDistributionRate = (int)(WaterTowers * WaterTowerScaling);
     }
 
@@ -62,7 +63,7 @@ public class BackgroundData
     public void UpgradeWaterTowers(int spent, int ExtractMode)
     {
 
-        WaterTowers+= spent/1000;
+        WaterTowers+= spent/10;
         MaxWaterDistributionRate = (int)(WaterTowerScaling * WaterTowers);
         CalculateWaterDistributionRate(ExtractMode);
 
@@ -73,7 +74,10 @@ public class BackgroundData
     {
         int i = 0, last = NumberofSources, sum = 0;
         if (mode == 0)
+		{
+			AmmountPulledFromSources[last]=0;
             last = NumberofSources - 1;
+		}
         else if (mode == 1)
         {
             while (i < NumberofSources-1)
@@ -82,13 +86,21 @@ public class BackgroundData
                 i++;
             }
         }
-        while (i < NumberofSources)
+        while (i < last)
         {
             AmmountPulledFromSources[i] = WaterSources[i].GetAvailability();
             sum = sum + WaterSources[i].GetAvailability();
             i++;
         }
         WaterDistributionRate = Mathf.Min(sum, MaxWaterDistributionRate, WaterConsumptionRate);
+		i=0;
+		while(i<NumberofSources)
+		{
+			if(AmmountPulledFromSources[i]!=0)
+			{
+				AmmountPulledFromSources[i]=AmmountPulledFromSources[i]*(int)(WaterDistributionRate/sum);
+			}
+		}
 
     }
 
