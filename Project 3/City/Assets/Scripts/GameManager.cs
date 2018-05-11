@@ -50,9 +50,9 @@ public class GameManager : MonoBehaviour
         data = new BackgroundData(10000, Random.Range(60, 80), 10000, 3);
         AverageTemperature = data.Temperature;
         //lake
-        data.WaterSources[0] = new WaterSource("Lake", 10000000, Random.Range(100000,200000), 100, 1);
+        data.WaterSources[0] = new WaterSource("Lake", 100000, 5000, 1, 1);
         //aquifer
-        data.WaterSources[1] = new WaterSource("Aquifer", 10000000, Random.Range(100000,200000), 100, 1);
+        data.WaterSources[1] = new WaterSource("Aquifer", 100000, 5000, 1, 1);
         //shipments
         data.WaterSources[2] = new WaterSource.WaterShipment("Shipment", 0, 0, 1, 1);
         ((WaterSource.WaterShipment)data.WaterSources[2]).setPrices(data.Temperature);
@@ -82,9 +82,9 @@ public class GameManager : MonoBehaviour
         Endturn.onClick.AddListener(EndturnListener);
         LakeReserve.maxValue = data.WaterSources[0].GetReserve();
         AquiferReserve.maxValue = data.WaterSources[1].GetReserve();
-        ShipmentReserve.maxValue = 10000000;
+        ShipmentReserve.maxValue = 50000;
 
-        City.SetLakeMax(10000000);
+        City.SetLakeMax(100000);
         City.SetLakeCurrent(LakeReserve.maxValue);
 
         WTInvestment.onClick.AddListener(delegate { SetCurrentInvestment(0); });
@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
             if (RainTurnCount == 0)
             {
 
-                data.SetEvent(0, Random.Range(5, 15));
+                data.SetEvent(0, Random.Range(10, 20));
                 RainTurnCount = RainInterval;
                 if (data.Temperature < 32)
                     City.SetWeather(CityController.SNOW);
