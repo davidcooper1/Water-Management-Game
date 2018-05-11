@@ -63,7 +63,7 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 
 ### How the Game Works
 * The player must meet the water consumption needs of the city through a turn base game.
-  <br>![Var Pane](https://puu.sh/A3XN0/8bf1aef9d9.png)
+  <br>![Var Pane](https://github.com/davidcooper1/Water-Management-Game/blob/master/Project%203/Screenshots/UI1.jpg)
   - i.e. Water distribution and supply must meet or exceed water consumption needs.
   - Water consumption is dependent upon temperature and population
     * Higher temperature and population means higher water consumption, and vice versa.
@@ -71,7 +71,7 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
   - After the player loses 10 lives then the game is over.
   - The game is considered won when the player has lasted until turn 50.
 * The player can invest in different infrastructure to manipulate Water Distribution:
-  <br>![UI Buttons](https://puu.sh/A3XM0/5f0da2bc12.png)
+  <br>![UI Buttons](https://github.com/davidcooper1/Water-Management-Game/blob/master/Project%203/Screenshots/UI2.jpg)
   - Water Tower 
      * Investments increases water distribution maximum.
   - Water Sources 
@@ -82,7 +82,7 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
      *  Water Shipments prices are base on temperature.
 * Money comes in the form of taxes each turn and varies based on the population amount.
 * Different events can occur that affect the flow of gameplay.
-  <br>![Event Pane](https://puu.sh/A3Y2G/dbca60f760.png)
+  <br>![Event Pane](https://github.com/davidcooper1/Water-Management-Game/blob/master/Project%203/Screenshots/UI3.jpg)
   - These events affect:
     * Populaion through migration events.
     * Temperature through cold and warm fronts.
