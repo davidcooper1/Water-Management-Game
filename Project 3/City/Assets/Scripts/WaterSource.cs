@@ -17,7 +17,7 @@ public class WaterSource
         //incrementing reserve and availability, use for water shipments
         public void setPrices(int temp)
         {
-            RefillScale = (double)650/(double)temp;
+            RefillScale = (double)temp/6.5;
         }
         public void IncSource(int a)
         {
