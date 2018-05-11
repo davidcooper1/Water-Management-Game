@@ -32,10 +32,12 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 * New city model
 * Added animations for events
 * Added sound
- - events
- - game music
- - button clicks
+  - Events
+  - Game music
+  - Button clicks
 * Added new gameplay mechanics
+  - Shipment prices is base on temperature
+  - Player can choose how to extract water
 
 ### Things that we learned...
 
