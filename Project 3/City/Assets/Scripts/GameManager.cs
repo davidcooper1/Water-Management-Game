@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     //buttons
     public Button Endturn, WTInvestment, LKInvestment, AQInvestment, WaterShipment,
-        Invest1000, Invest2000, Invest5000, Extraction, ExtractFromSources, ExtractFromShipment, ExtractFromAll;
+        Invest1000, Invest2000, Invest5000, Extraction, ExtractFromSources, ExtractFromShipment, ExtractFromAll, NoExtract;
 
     //texts
     public Text Population, WaterConsumptionRate, WaterDistributionRate, Temperature,
@@ -45,14 +45,14 @@ public class GameManager : MonoBehaviour
         gamelength = 50;
         turn = 0;
         LivesCounter = 10;
-     
+
         //initializing default game variable values
         data = new BackgroundData(10000, Random.Range(60, 80), 10000, 3);
         AverageTemperature = data.Temperature;
         //lake
-        data.WaterSources[0] = new WaterSource("Lake", 100000, 5000, 1, 1);
+        data.WaterSources[0] = new WaterSource("Lake", 7000000, Random.Range(100000, 200000), 100, 1);
         //aquifer
-        data.WaterSources[1] = new WaterSource("Aquifer", 100000, 5000, 1, 1);
+        data.WaterSources[1] = new WaterSource("Aquifer", 7000000, Random.Range(100000, 200000), 100, 1);
         //shipments
         data.WaterSources[2] = new WaterSource.WaterShipment("Shipment", 0, 0, 1, 1);
         ((WaterSource.WaterShipment)data.WaterSources[2]).setPrices(data.Temperature);
@@ -82,9 +82,9 @@ public class GameManager : MonoBehaviour
         Endturn.onClick.AddListener(EndturnListener);
         LakeReserve.maxValue = data.WaterSources[0].GetReserve();
         AquiferReserve.maxValue = data.WaterSources[1].GetReserve();
-        ShipmentReserve.maxValue = 50000;
+        ShipmentReserve.maxValue = 5000000;
 
-        City.SetLakeMax(100000);
+        City.SetLakeMax(7000000);
         City.SetLakeCurrent(LakeReserve.maxValue);
 
         WTInvestment.onClick.AddListener(delegate { SetCurrentInvestment(0); });
@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
         ExtractFromAll.onClick.AddListener(delegate { SetExtractionMode(2); });
         ExtractFromSources.onClick.AddListener(delegate { SetExtractionMode(0); });
         ExtractFromShipment.onClick.AddListener(delegate { SetExtractionMode(1); });
+        NoExtract.onClick.AddListener(delegate { SetExtractionMode(3); });
 
     }
 
@@ -104,8 +105,8 @@ public class GameManager : MonoBehaviour
     //button listeners
     private void SetExtractionMode(int mode)
     {
-            Extractmode = mode;
-            data.CalculateWaterDistributionRate(mode);
+        Extractmode = mode;
+        data.CalculateWaterDistributionRate(mode);
     }
     private void EndturnListener()
     {
@@ -134,7 +135,7 @@ public class GameManager : MonoBehaviour
                 {
                     data.SetEvent(1, Random.Range(5, 7));
                     CurrentTempEventTurnCount--;
-                   WarmFront.SetActive(true);
+                    WarmFront.SetActive(true);
                     ColdFront.SetActive(false);
                 }
                 else if (CurrentTempEvent == 1)
@@ -195,7 +196,7 @@ public class GameManager : MonoBehaviour
                 }
                 else if (CurrentRainEvent == 1)
                 {
-                   Drought.SetActive(false);
+                    Drought.SetActive(false);
                     Monsoon.SetActive(true);
                     CurrentRainEventTurnCount--;
                 }
@@ -210,7 +211,7 @@ public class GameManager : MonoBehaviour
             if (RainTurnCount == 0)
             {
 
-                data.SetEvent(0, Random.Range(10, 20));
+                data.SetEvent(0, Random.Range(5, 10));
                 RainTurnCount = RainInterval;
                 if (data.Temperature < 32)
                     City.SetWeather(CityController.SNOW);
@@ -228,7 +229,7 @@ public class GameManager : MonoBehaviour
                 City.SetSunOut(true);
             }
             //else if (data.Temperature < 40)
-                //City.SetCoolColor(true);
+            //City.SetCoolColor(true);
             else
             {
                 //City.SetCoolColor(false);
@@ -258,9 +259,9 @@ public class GameManager : MonoBehaviour
     private void SetCurrentInvestment(int c)
     {
         CurrentInvestment = c;
-        if(c == 3)
+        if (c == 3)
         {
-            Invest1000.GetComponentInChildren<Text>().text = "$1000 for\n"+((WaterSource.WaterShipment)data.WaterSources[2]).getWaterforPrices(1000).ToString() + " Gal";
+            Invest1000.GetComponentInChildren<Text>().text = "$1000 for\n" + ((WaterSource.WaterShipment)data.WaterSources[2]).getWaterforPrices(1000).ToString() + " Gal";
             Invest2000.GetComponentInChildren<Text>().text = "$2000 for\n" + ((WaterSource.WaterShipment)data.WaterSources[2]).getWaterforPrices(2000).ToString() + " Gal";
             Invest5000.GetComponentInChildren<Text>().text = "$5000 for\n" + ((WaterSource.WaterShipment)data.WaterSources[2]).getWaterforPrices(5000).ToString() + " Gal";
         }
@@ -279,10 +280,10 @@ public class GameManager : MonoBehaviour
         {
             if (data.DepleteFund(spent) == true)
             {
-                data.UpgradeWaterTowers(spent,Extractmode);
+                data.UpgradeWaterTowers(spent, Extractmode);
             }
         }
-        else if(CurrentInvestment == 1)
+        else if (CurrentInvestment == 1)
         {
             if (data.DepleteFund(spent) == true)
             {
@@ -290,7 +291,7 @@ public class GameManager : MonoBehaviour
                 data.CalculateWaterDistributionRate(Extractmode);
             }
         }
-        else if(CurrentInvestment == 2)
+        else if (CurrentInvestment == 2)
         {
             if (data.DepleteFund(spent) == true)
             {
@@ -298,11 +299,11 @@ public class GameManager : MonoBehaviour
                 data.CalculateWaterDistributionRate(Extractmode);
             }
         }
-        else if(CurrentInvestment == 3)
+        else if (CurrentInvestment == 3)
         {
             if (data.DepleteFund(spent) == true)
             {
-                ((WaterSource.WaterShipment) data.WaterSources[2]).IncSource(spent);
+                ((WaterSource.WaterShipment)data.WaterSources[2]).IncSource(spent);
                 data.CalculateWaterDistributionRate(Extractmode);
             }
         }

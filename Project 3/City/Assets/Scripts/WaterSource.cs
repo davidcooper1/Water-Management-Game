@@ -17,7 +17,7 @@ public class WaterSource
         //incrementing reserve and availability, use for water shipments
         public void setPrices(int temp)
         {
-            RefillScale = (double)temp/6.5;
+            RefillScale = (double)10000 / (double)temp;
         }
         public void IncSource(int a)
         {
@@ -26,7 +26,7 @@ public class WaterSource
         }
         public int getWaterforPrices(int price)
         {
-            return (int)(price*RefillScale);
+            return (int)(price * RefillScale);
         }
 
     }
@@ -60,7 +60,7 @@ public class WaterSource
     //refilling reserve, base on rain
     public void RefillReserve(int rainstrength)
     {
-        Reserve += (int)(rainstrength * MaxAvailability / 100.0);
+        Reserve += (int)(rainstrength * MaxReserve / 100.0);
         if (Reserve > MaxReserve)
             Reserve = MaxReserve;
         if (Reserve > MaxAvailability)
