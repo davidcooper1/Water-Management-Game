@@ -93,10 +93,10 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
 * City was built using two different Low-Poly European City Packs that were free on the Unity Asset Store.
   - [Decorations Set](https://assetstore.unity.com/packages/3d/environments/urban/lowpoly-modern-city-decorations-set-66070)
   - [Buildings Set](https://assetstore.unity.com/packages/3d/environments/urban/lowpoly-modern-city-buildings-set-64427)
-  ![City SS](https://puu.sh/A3XOb/033b99b502.png)
+  ![City SS](https://github.com/davidcooper1/Water-Management-Game/blob/master/Project%203/Screenshots/City%20model.jpg)
 * Everything lies on a terrain with holes left for lakes.
 * Lake water was made using Advanced Water prefab in the unity standard assets package.
 * Cloud was a model downloaded off Sketchfab. [Cloud Model](https://sketchfab.com/models/116f49c23c4347eba340d0f59b0601f7)
 * Rain was created using the Unity Particle System.
-  <br>![Rain Image](https://puu.sh/A3XPz/212214c353.png)
+  <br>![Rain Image](https://github.com/davidcooper1/Water-Management-Game/blob/master/Project%203/Screenshots/rain.jpg)
 * Lake water moves up and down based on the amount of water in it.
