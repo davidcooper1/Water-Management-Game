@@ -39,10 +39,9 @@ https://www.youtube.com/watch?v=PvTv1Ti4qYc
   - Shipment prices is base on temperature
   - Player can choose how to extract water
 
-### Things that we learned...
-
-
 ### Biggest Issues
+* Getting Navmesh to work for the car animations
+* Using the sound API
 
 
 ### Contributors
