@@ -1,7 +1,7 @@
 # Water Management Game
 
 ## Video Demonstration
-https://www.youtube.com/watch?v=PvTv1Ti4qYc
+https://youtu.be/nsWSUA7NH3o
 
 ## How to Install the Windows 10 App
 1. Download the repository ZIP.
